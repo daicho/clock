@@ -9,16 +9,22 @@ void Reshape(int, int);
 void Timer(int);
 void drawCircle(int, int, int);
 void drawHand();
+void drawGear(int, int, int, int, int);
 
 int main(int argc, char *argv[]) {
     // 初期化・設定
     glutInit(&argc, argv);
     glutInitWindowSize(640, 640);
-    glutCreateWindow("Color Sample");
+    glutCreateWindow("Mechanical Clock");
     glutDisplayFunc(Display);
     glutReshapeFunc(Reshape);
     glutInitDisplayMode(GLUT_RGBA);
     glClearColor(1.0, 1.0, 1.0, 1.0);
+
+    // アンチエイリアスを有効
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
 
     glutTimerFunc(500, Timer, 0);
     glutMainLoop();
@@ -73,7 +79,7 @@ void Display(void) {
     // 針描画
     glColor3ub(0, 0, 0);
 
-    drawCircle(x_c, y_c, 120);
+    drawGear(x_c, y_c, 120, 20, 20);
 
     glBegin(GL_LINES);
 
@@ -115,6 +121,26 @@ void drawCircle(int x, int y, int r) {
     for (i = 0; i < h; i++) {
         double theta = 2 * M_PI * i / h;
         glVertex2i(x + r * sin(theta), y + r * cos(theta));
+    }
+
+    glEnd();
+}
+
+// 歯車
+void drawGear(int x, int y, int r, int a, int n) {
+    int i;
+    double w = M_PI / n;
+
+    glBegin(GL_LINE_LOOP);
+
+    for (i = 0; i < 2 * n; i++) {
+        if (i % 2) {// ちんちん電車うんちん値上げする気まんまん
+            glVertex2i(x + r * cos(i * w), y + r * sin(i * w));
+            glVertex2i(x + r * cos((i + 1) * w), y + r * sin((i + 1) * w));
+        } else {
+            glVertex2i(x + r * cos(i * w) + a * cos((i + 0.5) * w), y + r * sin(i * w) + a * sin((i + 0.5) * w));
+            glVertex2i(x + r * cos((i + 1) * w) + a * cos((i + 0.5) * w), y + r * sin((i + 1) * w) + a * sin((i + 0.5) * w));
+        }
     }
 
     glEnd();
