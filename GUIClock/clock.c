@@ -97,12 +97,6 @@ void Display(void) {
     double wp = 2 * M_PI;
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3ub(0, 0, 0);
-
-    // 針描画
-    drawHand(x0, y0, lh, ah);
-    drawHand(x0, y0, lm, am);
-    drawHand(x0, y0, ls, as);
 
     // 歯車描画
     drawCircle(x0, y0, 0.5, 100);
@@ -113,11 +107,14 @@ void Display(void) {
     drawGear(x0 + r1 + r, y0, tp * w1, r1, l, 80);
     drawGear(x0 + r1 + r, y0, tp * w1, r, l, 8);
 
+    drawGear(x0, y0 - r3 - r, tp * w3, r3, l, 62);
+    drawGear(x0, y0 - r3 - r, tp * w3, r, l, 8);
+
     drawGear(x0, y0, tp * w2, r2, l, 62);
     drawGear(x0, y0, tp * w2, r, l, 8);
 
-    drawGear(x0, y0 - r3 - r, tp * w3, r3, l, 62);
-    drawGear(x0, y0 - r3 - r, tp * w3, r, l, 8);
+    drawGangi(x0, y0 + r4 + r, tp * wg, rg, 0.02, 20);
+    drawGear(x0, y0 + r4 + r, tp * wg, r, l, 8);
 
     drawGear(x0, y0, tp * w4, r4, l, 48);
     drawGear(x0, y0, tp * w4, r, l, 8);
@@ -128,10 +125,13 @@ void Display(void) {
     drawGear(x0, y0, tp * w6, r6, l, 28);
     drawGear(x0, y0, tp * w6, r, l, 8);
 
-    drawGangi(x0, y0 + r4 + r, tp * wg, rg, 0.02, 20);
-    drawGear(x0, y0 + r4 + r, tp * wg, r, l, 8);
-
     drawPendulum(x0, y0 + r4 + rg + r + 0.01, rp, 3 * M_PI_2 + 0.1 * sin(t * wp));
+
+    // 針描画
+    glColor3ub(0, 0, 0);
+    drawHand(x0, y0, lh, ah);
+    drawHand(x0, y0, lm, am);
+    drawHand(x0, y0, ls, as);
 
     glFlush();
 }
@@ -165,7 +165,18 @@ void Timer(int value) {
 void drawCircle(double x, double y, double r, int n) {
     int i;
 
+    glColor3ub(255, 255, 255);
     glBegin(GL_POLYGON);
+
+    for (i = 0; i < n; i++) {
+        double theta = 2 * M_PI * i / n;
+        glVertex2d(x + r * sin(theta), y + r * cos(theta));
+    }
+
+    glEnd();
+
+    glColor3ub(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < n; i++) {
         double theta = 2 * M_PI * i / n;
@@ -182,6 +193,7 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
 
     drawCircle(x, y, r - l / 2, n * 2);
 
+    glColor3ub(255, 255, 255);
     glBegin(GL_QUADS);
 
     for (i = 0; i < n * 2; i += 2) {
@@ -193,7 +205,8 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
 
     glEnd();
 
-    /*glBegin(GL_LINE_LOOP);
+    glColor3ub(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < 2 * n; i++) {
         if (i % 2) {
@@ -205,13 +218,26 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
         }
     }
 
-    glEnd();*/
+    glEnd();
 }
 
-// カナ (小さい歯車)
+// カナ(小さい歯車)
 void drawKana(double x, double y, double a, double r, double l, int n) {
     int i;
     double w = M_PI / n;
+
+    drawCircle(x, y, r - l / 2, n * 2);
+
+    glBegin(GL_QUADS);
+
+    for (i = 0; i < n * 2; i += 2) {
+        glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
+        glVertex2d(x + (r - l / 2) * cos(i * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin(i * w + a) + l * sin((i + 0.5) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 1) * w + a) + l * sin((i + 0.5) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a), y + (r - l / 2) * sin((i + 1) * w + a));
+    }
+
+    glEnd();
 
     glBegin(GL_LINE_LOOP);
 
@@ -235,12 +261,23 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
 
     drawCircle(x, y, r - l / 2, n);
 
+    glColor3ub(255, 255, 255);
     glBegin(GL_TRIANGLES);
 
     for (i = 0; i < n; i++) {
         glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
         glVertex2d(x + (r + l / 2) * cos(i * w + a), y + (r + l / 2) * sin(i * w + a));
         glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a), y + (r - l / 2) * sin((i + 1) * w + a));
+    }
+
+    glEnd();
+
+    glColor3ub(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
+
+    for (i = 0; i < n; i++) {
+        glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
+        glVertex2d(x + (r + l / 2) * cos(i * w + a), y + (r + l / 2) * sin(i * w + a));
     }
 
     glEnd();
