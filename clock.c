@@ -22,6 +22,7 @@ void putSprite(GLuint, double, double, double, double, pngInfo *);
 
 // 時刻
 long double t;
+long double st;
 
 // 画像
 GLuint dial_img;
@@ -52,20 +53,22 @@ int main(int argc, char *argv[]) {
     glutDisplayFunc(Display);
     glutReshapeFunc(Reshape);
     Timer(0);
+    st = t;
     glutMainLoop();
 
     return 0;
 }
 
 void Display(void) {
-    time_t tv_sec = (int)t;
+    long double tt = st + (t - st) * 1;
+    time_t tv_sec = (int)tt;
     struct tm *t_st = localtime(&tv_sec);
 
-    int tictac = (t - (int)t) * 2;
-    double decimal = (t - (int)t) * 2 - tictac;
-    double tp = (int)t + (pow(decimal, 5) + tictac) / 2;
+    int tictac = (tt - (int)tt) * 2;
+    double decimal = (tt - (int)tt) * 2 - tictac;
+    double tp = (int)tt + (pow(decimal, 10) + tictac) / 2;
 
-    double sec = t_st->tm_sec + tp - (int)t;
+    double sec = t_st->tm_sec + tp - (int)tt;
     double min = t_st->tm_min + sec / 60;
     double hour = t_st->tm_hour + min / 60;
 
@@ -74,9 +77,9 @@ void Display(void) {
     double y0 = 0.3;
 
     // 針の長さ
-    double lh = 0.4;
-    double lm = 0.45;
-    double ls = 0.55;
+    double lh = 0.45;
+    double lm = 0.51;
+    double ls = 0.57;
 
     // 針の角度
     double ah = -2 * M_PI * hour / 12 + M_PI_2;
@@ -139,28 +142,28 @@ void Display(void) {
     double a5 = M_PI / 4;
     double a6 = M_PI / 4;
     double ag = 0;
-    double ap = 0.1;
+    double ap = 0.5;
 
     // 描画
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3ub(0, 0, 0);
-    drawPendulum(x0, y0 + r4 + rg + r + 0.01, rp, 3 * M_PI_2 + 0.1 * sin(t * wp + ap));
+    drawPendulum(x0, y0 + r4 + rg + r + 0.01, rp, 3 * M_PI_2 + 0.1 * sin(tt * wp + ap));
 
     glColor3ub(200, 200, 200);
-    drawGear(x0 + r0 + r, y0, tp * w0 + a0, r0, l, n0);
-    drawKana(x0 + r0 + r, y0, tp * w0 + a0, r, l, n);
-
     drawGangi(x0, y0 + r4 + r, tp * wg + ag, rg, 0.02, ng);
     drawKana(x0, y0 + r4 + r, tp * wg + ag, r, l, n);
 
     drawGear(x0, y0, tp * w4 + a4, r4, l, n4);
     drawKana(x0, y0, tp * w4 + a4, r, l, n);
 
+    drawGear(x0 + r0 + r, y0, tp * w0 + a0, r0, l, n0);
+    drawKana(x0 + r0 + r, y0, tp * w0 + a0, r, l, n);
+
     drawGear(x0, y0 - r3 - r, tp * w3 + a3, r3, l, n3);
     drawKana(x0, y0 - r3 - r, tp * w3 + a3, r, l, n);
 
-    drawGear(x0, y0, 0 * tp * w2 + a2, r2, l, n2);
-    drawKana(x0, y0, 0 * tp * w2 + a2, r, l, n);
+    drawGear(x0, y0, tp * w2 + a2, r2, l, n2);
+    drawKana(x0, y0, tp * w2 + a2, r, l, n);
 
     drawGear(x0 - r1 - r, y0, tp * w1 + a1, r1, l, n1);
     drawKana(x0 - r1 - r, y0, tp * w1 + a1, r, l, n);
@@ -241,7 +244,7 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     glBegin(GL_POLYGON);
 
     for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + r * 0.2 * sin(i * w + a), y + r * 0.2 * cos(i * w + a));
+        glVertex2d(x + 0.045 * sin(i * w + a), y + 0.045 * cos(i * w + a));
     }
 
     glEnd();
@@ -261,7 +264,7 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
 
     // 縁線
     glColor3ub(0, 0, 0);
-    drawCircle(x, y, r * 0.2, n * 2);
+    drawCircle(x, y, 0.045, n * 2);
     drawCircle(x, y, r - l * 1.5, n * 2);
     glBegin(GL_LINE_LOOP);
 
@@ -293,9 +296,9 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     glBegin(GL_LINES);
 
     for (i = 0; i < 5; i++) {
-        glVertex2d(x + r * 0.2 * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + r * 0.2 * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + 0.045 * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + 0.045 * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
         glVertex2d(x + (r - l * 1.5) * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + (r - l * 1.5) * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
-        glVertex2d(x + r * 0.2 * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + r * 0.2 * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + 0.045 * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + 0.045 * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
         glVertex2d(x + (r - l * 1.5) * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + (r - l * 1.5) * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
     }
 
@@ -356,6 +359,7 @@ void drawKana(double x, double y, double a, double r, double l, int n) {
 void drawGangi(double x, double y, double a, double r, double l, int n) {
     int i;
     double w = -2 * M_PI / n;
+    double ws = 2 * M_PI / 5;
     GLfloat color[4];
 
     // 現在の色を取得
@@ -373,7 +377,7 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     glBegin(GL_POLYGON);
 
     for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + r * 0.2 * sin(i * w + a), y + r * 0.2 * cos(i * w + a));
+        glVertex2d(x + 0.045 * sin(i * w + a), y + 0.045 * cos(i * w + a));
     }
 
     glEnd();
@@ -391,7 +395,7 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
 
     // 縁線
     glColor3ub(0, 0, 0);
-    drawCircle(x, y, r * 0.2, n * 2);
+    drawCircle(x, y, 0.045, n * 2);
     drawCircle(x, y, r - l * 1.5, n);
     glBegin(GL_LINE_LOOP);
 
@@ -418,9 +422,9 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     glBegin(GL_LINES);
 
     for (i = 0; i < 5; i++) {
-        glVertex2d(x + r * 0.2 * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + r * 0.2 * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + 0.045 * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + 0.045 * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
         glVertex2d(x + (r - l * 1.5) * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + (r - l * 1.5) * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
-        glVertex2d(x + r * 0.2 * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + r * 0.2 * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + 0.045 * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + 0.045 * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
         glVertex2d(x + (r - l * 1.5) * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + (r - l * 1.5) * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
     }
 
@@ -445,7 +449,7 @@ void drawPendulum(double x, double y, double r, double a) {
     glEnd();
 
     // 重り
-    drawCircle(x + (r + 0.1) * cos(a), y + (r + 0.1) * sin(a), 0.1, 100);
+    drawCircle(x + (r + 0.15) * cos(a), y + (r + 0.15) * sin(a), 0.15, 100);
 
     // アンクル
     glBegin(GL_LINE_STRIP);
