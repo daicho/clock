@@ -5,7 +5,7 @@
 #include <sys/time.h>
 
 #include <GL/glut.h>
-//#include <GL/glpng.h>
+#include <GL/glpng.h>
 
 #define FPS 60
 
@@ -18,38 +18,39 @@ void drawKana(double, double, double, double, double, int);
 void drawGangi(double, double, double, double, double, int);
 void drawHand(double, double, double, double);
 void drawPendulum(double, double, double, double);
-//void putSprite(GLuint, double, double, pngInfo *);
+void putSprite(GLuint, double, double, double, double, pngInfo *);
 
 // 時刻
 long double t;
 
 // 画像
-//GLuint dial_img;
-//pngInfo dial_info;
+GLuint dial_img;
+pngInfo dial_info;
 
 int main(int argc, char *argv[]) {
-    // 画像読み込み
-    //dial_img = pngBind("images/dial.png", PNG_NOMIPMAP, PNG_ALPHA, &dial_info, GL_CLAMP, GL_NEAREST, GL_NEAREST);
+    // 初期化
+    glutInit(&argc, argv);
+    glutInitWindowSize(640, 640);
+    glutCreateWindow("Mechanical Clock");
+    glutInitDisplayMode(GLUT_RGBA);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
 
     // アンチエイリアスを有効化
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-    // 初期化・設定
-    glutInit(&argc, argv);
-    glutInitWindowSize(640, 640);
-    glutCreateWindow("Mechanical Clock");
-    glutInitDisplayMode(GLUT_RGBA);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    // 画像読み込み
+    dial_img = pngBind("images/dial.png", PNG_NOMIPMAP, PNG_ALPHA, &dial_info, GL_CLAMP, GL_NEAREST, GL_NEAREST);
+
+    // 開始
     glutDisplayFunc(Display);
     glutReshapeFunc(Reshape);
-
     Timer(0);
     glutMainLoop();
 
@@ -57,6 +58,7 @@ int main(int argc, char *argv[]) {
 }
 
 void Display(void) {
+    t = 0;
     time_t tv_sec = (int)t;
     struct tm *t_st = localtime(&tv_sec);
 
@@ -129,38 +131,48 @@ void Display(void) {
     double w5 = w2 / -p5;
     double w6 = w5 / -p6;
 
+    // 歯車の位相
+    double a0 = M_PI / n0;
+    double a1 = M_PI / n1;
+    double a2 = 0;
+    double a3 = 0;
+    double a4 = M_PI / n4;
+    double a5 = M_PI / 4;
+    double a6 = M_PI / 4;
+    double ag = 0;
+    double ap = 0.1;
+
+    // 描画
     glClear(GL_COLOR_BUFFER_BIT);
-
-    drawPendulum(x0, y0 + r4 + rg + r + 0.01, rp, 3 * M_PI_2 + 0.1 * sin(t * wp));
-
-    // 歯車描画
     glColor3ub(0, 0, 0);
-    drawCircle(x0, y0, 0.6, 100);
+    drawPendulum(x0, y0 + r4 + rg + r + 0.01, rp, 3 * M_PI_2 + 0.1 * sin(t * wp + ap));
 
     glColor3ub(200, 200, 200);
-    drawGear(x0 + r0 + r, y0, tp * w0, r0, l, n0);
-    drawGear(x0 + r0 + r, y0, tp * w0, r, l, n);
+    drawGear(x0 + r0 + r, y0, tp * w0 + a0, r0, l, n0);
+    drawGear(x0 + r0 + r, y0, tp * w0 + a0, r, l, n);
 
-    drawGangi(x0, y0 + r4 + r, tp * wg, rg, 0.02, ng);
-    drawGear(x0, y0 + r4 + r, tp * wg, r, l, n);
+    drawGangi(x0, y0 + r4 + r, tp * wg + ag, rg, 0.02, ng);
+    drawGear(x0, y0 + r4 + r, tp * wg + ag, r, l, n);
 
-    drawGear(x0, y0, tp * w4, r4, l, n4);
-    drawGear(x0, y0, tp * w4, r, l, n);
+    drawGear(x0, y0, tp * w4 + a4, r4, l, n4);
+    drawGear(x0, y0, tp * w4 + a4, r, l, n);
 
-    drawGear(x0, y0 - r3 - r, tp * w3, r3, l, n3);
-    drawGear(x0, y0 - r3 - r, tp * w3, r, l, n);
+    drawGear(x0, y0 - r3 - r, tp * w3 + a3, r3, l, n3);
+    drawGear(x0, y0 - r3 - r, tp * w3 + a3, r, l, n);
 
-    drawGear(x0, y0, tp * w2, r2, l, n2);
-    drawGear(x0, y0, tp * w2, r, l, n);
+    drawGear(x0, y0, 0 * tp * w2 + a2, r2, l, n2);
+    drawGear(x0, y0, 0 * tp * w2 + a2, r, l, n);
 
-    drawGear(x0 - r1 - r, y0, tp * w1, r1, l, n1);
-    drawGear(x0 - r1 - r, y0, tp * w1, r, l, n);
+    drawGear(x0 - r1 - r, y0, tp * w1 + a1, r1, l, n1);
+    drawGear(x0 - r1 - r, y0, tp * w1 + a1, r, l, n);
 
-    drawGear(x0 + r5 + r, y0, tp * w5, r5, l, n5);
-    drawGear(x0 + r5 + r, y0, tp * w5, r, l, n);
+    putSprite(dial_img, x0 - 0.6, y0 - 0.6, 1.2, 1.2, &dial_info);
 
-    drawGear(x0, y0, tp * w6, r6, l, n6);
-    drawGear(x0, y0, tp * w6, r, l, n);
+    drawGear(x0 + r5 + r, y0, tp * w5 + a5, r5, l, n5);
+    drawGear(x0 + r5 + r, y0, tp * w5 + a5, r, l, n);
+
+    drawGear(x0, y0, tp * w6 + a6, r6, l, n6);
+    drawGear(x0, y0, tp * w6 + a6, r, l, n);
 
     // 針描画
     glColor3ub(0, 0, 0);
@@ -242,10 +254,10 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     glBegin(GL_QUADS);
 
     for (i = 0; i < n * 2; i += 2) {
-        glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
-        glVertex2d(x + (r - l / 2) * cos(i * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin(i * w + a) + l * sin((i + 0.5) * w + a));
-        glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 1) * w + a) + l * sin((i + 0.5) * w + a));
-        glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a), y + (r - l / 2) * sin((i + 1) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a));
     }
 
     glEnd();
@@ -265,11 +277,11 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
 
     for (i = 0; i < 2 * n; i++) {
         if (i % 2) {
-            glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
-            glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a), y + (r - l / 2) * sin((i + 1) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a));
         } else {
-            glVertex2d(x + (r - l / 2) * cos(i * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin(i * w + a) + l * sin((i + 0.5) * w + a));
-            glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 1) * w + a) + l * sin((i + 0.5) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
         }
     }
 
@@ -406,11 +418,12 @@ void drawPendulum(double x, double y, double r, double a) {
 }
 
 // 画像表示
-/*void putSprite(GLuint num, double x, double y, pngInfo *info) { 
-    int w = info->Width;
-    int h = info->Height;
+void putSprite(GLuint num, double x, double y, double w, double h, pngInfo *info) { 
+    float color[4];
 
-    glPushMatrix();
+    // 現在の色を取得
+    glGetFloatv(GL_CURRENT_COLOR, color);
+
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, num);
     glColor4ub(255, 255, 255, 255);
@@ -423,14 +436,13 @@ void drawPendulum(double x, double y, double r, double a) {
     glTexCoord2i(0, 1);
     glVertex2d(x, y + h);
     
-    glTexCoord2i(1, 0);
+    glTexCoord2i(1, 1);
     glVertex2d(x + w, y + h);
     
-    glTexCoord2i(1, 1);
+    glTexCoord2i(1, 0);
     glVertex2d(x + w, y);
 
     glEnd();
-
+    glColor3fv(color);
     glDisable(GL_TEXTURE_2D);
-    glPopMatrix();
-}*/
+}
