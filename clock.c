@@ -58,7 +58,6 @@ int main(int argc, char *argv[]) {
 }
 
 void Display(void) {
-    t = 0;
     time_t tv_sec = (int)t;
     struct tm *t_st = localtime(&tv_sec);
 
@@ -149,30 +148,30 @@ void Display(void) {
 
     glColor3ub(200, 200, 200);
     drawGear(x0 + r0 + r, y0, tp * w0 + a0, r0, l, n0);
-    drawGear(x0 + r0 + r, y0, tp * w0 + a0, r, l, n);
+    drawKana(x0 + r0 + r, y0, tp * w0 + a0, r, l, n);
 
     drawGangi(x0, y0 + r4 + r, tp * wg + ag, rg, 0.02, ng);
-    drawGear(x0, y0 + r4 + r, tp * wg + ag, r, l, n);
+    drawKana(x0, y0 + r4 + r, tp * wg + ag, r, l, n);
 
     drawGear(x0, y0, tp * w4 + a4, r4, l, n4);
-    drawGear(x0, y0, tp * w4 + a4, r, l, n);
+    drawKana(x0, y0, tp * w4 + a4, r, l, n);
 
     drawGear(x0, y0 - r3 - r, tp * w3 + a3, r3, l, n3);
-    drawGear(x0, y0 - r3 - r, tp * w3 + a3, r, l, n);
+    drawKana(x0, y0 - r3 - r, tp * w3 + a3, r, l, n);
 
     drawGear(x0, y0, 0 * tp * w2 + a2, r2, l, n2);
-    drawGear(x0, y0, 0 * tp * w2 + a2, r, l, n);
+    drawKana(x0, y0, 0 * tp * w2 + a2, r, l, n);
 
     drawGear(x0 - r1 - r, y0, tp * w1 + a1, r1, l, n1);
-    drawGear(x0 - r1 - r, y0, tp * w1 + a1, r, l, n);
+    drawKana(x0 - r1 - r, y0, tp * w1 + a1, r, l, n);
 
     putSprite(dial_img, x0 - 0.6, y0 - 0.6, 1.2, 1.2, &dial_info);
 
     drawGear(x0 + r5 + r, y0, tp * w5 + a5, r5, l, n5);
-    drawGear(x0 + r5 + r, y0, tp * w5 + a5, r, l, n);
+    drawKana(x0 + r5 + r, y0, tp * w5 + a5, r, l, n);
 
     drawGear(x0, y0, tp * w6 + a6, r6, l, n6);
-    drawGear(x0, y0, tp * w6 + a6, r, l, n);
+    drawKana(x0, y0, tp * w6 + a6, r, l, n);
 
     // 針描画
     glColor3ub(0, 0, 0);
@@ -214,8 +213,7 @@ void drawCircle(double x, double y, double r, int n) {
     glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < n; i++) {
-        double theta = 2 * M_PI * i / n;
-        glVertex2d(x + r * sin(theta), y + r * cos(theta));
+        glVertex2d(x + r * sin(2 * M_PI * i / n), y + r * cos(2 * M_PI * i / n));
     }
 
     glEnd();
@@ -243,8 +241,7 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     glBegin(GL_POLYGON);
 
     for (i = 0; i < n * 2; i++) {
-        double theta = 2 * M_PI * i / n;
-        glVertex2d(x + r * 0.2 * sin(theta), y + r * 0.2 * cos(theta));
+        glVertex2d(x + r * 0.2 * sin(i * w + a), y + r * 0.2 * cos(i * w + a));
     }
 
     glEnd();
@@ -264,15 +261,8 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
 
     // 縁線
     glColor3ub(0, 0, 0);
-    glBegin(GL_LINE_LOOP);
-
-    for (i = 0; i < n * 2; i++) {
-        double theta = 2 * M_PI * i / n;
-        glVertex2d(x + r * 0.2 * sin(theta), y + r * 0.2 * cos(theta));
-    }
-
-    glEnd();
-    drawCircle(x, y, r - l * 1.5, n);
+    drawCircle(x, y, r * 0.2, n * 2);
+    drawCircle(x, y, r - l * 1.5, n * 2);
     glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < 2 * n; i++) {
@@ -285,8 +275,9 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
         }
     }
 
-    // 骨組み
     glEnd();
+
+    // 骨組み
     glColor3fv(color);
     glBegin(GL_QUADS);
 
@@ -316,40 +307,56 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
 void drawKana(double x, double y, double a, double r, double l, int n) {
     int i;
     double w = M_PI / n;
+    GLfloat color[4];
 
-    drawCircle(x, y, r - l / 2, n * 2);
+    // 現在の色を取得
+    glGetFloatv(GL_CURRENT_COLOR, color);
 
-    glBegin(GL_QUADS);
+    // 円
+    glBegin(GL_POLYGON);
 
-    for (i = 0; i < n * 2; i += 2) {
-        glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
-        glVertex2d(x + (r - l / 2) * cos(i * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin(i * w + a) + l * sin((i + 0.5) * w + a));
-        glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 1) * w + a) + l * sin((i + 0.5) * w + a));
-        glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a), y + (r - l / 2) * sin((i + 1) * w + a));
+    for (i = 0; i < n * 2; i++) {
+        glVertex2d(x + (r - l / 2) * sin(i * w + a), y + (r - l / 2) * cos(i * w + a));
     }
 
     glEnd();
 
+    // 歯
+    glColor3fv(color);
+    glBegin(GL_QUADS);
+
+    for (i = 0; i < n * 2; i += 2) {
+        glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
+        glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a));
+    }
+
+    glEnd();
+
+    // 縁線
+    glColor3ub(0, 0, 0);
     glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < 2 * n; i++) {
         if (i % 2) {
-            glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
-            glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a), y + (r - l / 2) * sin((i + 1) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a));
         } else {
-            glVertex2d(x + (r - l / 2) * cos(i * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin(i * w + a) + l * sin((i + 0.5) * w + a));
-            glVertex2d(x + (r - l / 2) * cos((i + 1) * w + a) + l * cos((i + 0.5) * w + a), y + (r - l / 2) * sin((i + 1) * w + a) + l * sin((i + 0.5) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
+            glVertex2d(x + (r - l / 2) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l / 2) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
         }
     }
 
     glEnd();
+    glColor3fv(color);
 }
 
 // ガンギ車 
 void drawGangi(double x, double y, double a, double r, double l, int n) {
     int i;
     double w = -2 * M_PI / n;
-    float color[4];
+    GLfloat color[4];
 
     // 現在の色を取得
     glGetFloatv(GL_CURRENT_COLOR, color);
@@ -360,6 +367,13 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     for (i = 0; i <= n; i++) {
         glVertex2d(x + (r - l * 1.5) * cos(i * w + a), y + (r - l * 1.5) * sin(i * w + a));
         glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
+    }
+
+    glEnd();
+    glBegin(GL_POLYGON);
+
+    for (i = 0; i < n * 2; i++) {
+        glVertex2d(x + r * 0.2 * sin(i * w + a), y + r * 0.2 * cos(i * w + a));
     }
 
     glEnd();
@@ -377,12 +391,37 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
 
     // 縁線
     glColor3ub(0, 0, 0);
+    drawCircle(x, y, r * 0.2, n * 2);
     drawCircle(x, y, r - l * 1.5, n);
     glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < n; i++) {
         glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
         glVertex2d(x + (r + l / 2) * cos(i * w + a), y + (r + l / 2) * sin(i * w + a));
+    }
+
+    glEnd();
+
+    // 骨組み
+    glColor3fv(color);
+    glBegin(GL_QUADS);
+
+    for (i = 0; i < 5; i++) {
+        glVertex2d(x + r * 0.07 * sin(i * ws + a), y - r * 0.07 * cos(i * ws + a));
+        glVertex2d(x - r * 0.07 * sin(i * ws + a), y + r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + (r - l) * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + (r - l) * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + (r - l) * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + (r - l) * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
+    }
+
+    glEnd();
+    glColor3ub(0, 0, 0);
+    glBegin(GL_LINES);
+
+    for (i = 0; i < 5; i++) {
+        glVertex2d(x + r * 0.2 * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + r * 0.2 * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + (r - l * 1.5) * cos(i * ws + a) + r * 0.07 * sin(i * ws + a), y + (r - l * 1.5) * sin(i * ws + a) - r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + r * 0.2 * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + r * 0.2 * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
+        glVertex2d(x + (r - l * 1.5) * cos(i * ws + a) - r * 0.07 * sin(i * ws + a), y + (r - l * 1.5) * sin(i * ws + a) + r * 0.07 * cos(i * ws + a));
     }
 
     glEnd();
