@@ -271,8 +271,8 @@ void drawMinute(double x, double y, double a, double r) {
 
     glBegin(GL_POLYGON);
 
-    glVertex2d(x - 0.06 * cos(a) - 0.003 * sin(a), y - 0.06 * sin(a) + 0.003 * cos(a));
-    glVertex2d(x - 0.06 * cos(a) + 0.003 * sin(a), y - 0.06 * sin(a) - 0.003 * cos(a));
+    glVertex2d(x - 0.06 * cos(a) - 0.01 * sin(a), y - 0.06 * sin(a) + 0.01 * cos(a));
+    glVertex2d(x - 0.06 * cos(a) + 0.01 * sin(a), y - 0.06 * sin(a) - 0.01 * cos(a));
     glVertex2d(x + 0.02 * sin(a), y - 0.02 * cos(a));
     glVertex2d(x + r * cos(a) + 0.003 * sin(a), y + r * sin(a) - 0.003 * cos(a));
     glVertex2d(x + r * cos(a) - 0.003 * sin(a), y + r * sin(a) + 0.003 * cos(a));
@@ -282,11 +282,11 @@ void drawMinute(double x, double y, double a, double r) {
     glColor3ub(0, 0, 0);
     glBegin(GL_LINE_LOOP);
 
-    glVertex2d(x - 0.06 * cos(a) - 0.002 * sin(a), y - 0.06 * sin(a) + 0.002 * cos(a));
-    glVertex2d(x - 0.06 * cos(a) + 0.002 * sin(a), y - 0.06 * sin(a) - 0.002 * cos(a));
+    glVertex2d(x - 0.06 * cos(a) - 0.01 * sin(a), y - 0.06 * sin(a) + 0.01 * cos(a));
+    glVertex2d(x - 0.06 * cos(a) + 0.01 * sin(a), y - 0.06 * sin(a) - 0.01 * cos(a));
     glVertex2d(x + 0.02 * sin(a), y - 0.02 * cos(a));
-    glVertex2d(x + r * cos(a) + 0.002 * sin(a), y + r * sin(a) - 0.002 * cos(a));
-    glVertex2d(x + r * cos(a) - 0.002 * sin(a), y + r * sin(a) + 0.002 * cos(a));
+    glVertex2d(x + r * cos(a) + 0.003 * sin(a), y + r * sin(a) - 0.003 * cos(a));
+    glVertex2d(x + r * cos(a) - 0.003 * sin(a), y + r * sin(a) + 0.003 * cos(a));
     glVertex2d(x - 0.02 * sin(a), y + 0.02 * cos(a));
 
     glEnd();
@@ -341,19 +341,19 @@ void drawPendulum(double x, double y, double a, double r) {
     // 棒
     glBegin(GL_QUADS);
 
-    glVertex2d(x - 0.1 * cos(a) - 0.015 * sin(a), y - 0.1 * sin(a) - 0.015 * cos(a));
-    glVertex2d(x - 0.1 * cos(a) + 0.015 * sin(a), y - 0.1 * sin(a) + 0.015 * cos(a));
-    glVertex2d(x + r * cos(a) + 0.015 * sin(a), y + r * sin(a) + 0.015 * cos(a));
-    glVertex2d(x + r * cos(a) - 0.015 * sin(a), y + r * sin(a) - 0.015 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) - 0.015 * sin(a), y - 0.1 * sin(a) + 0.015 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) + 0.015 * sin(a), y - 0.1 * sin(a) - 0.015 * cos(a));
+    glVertex2d(x + (r + 0.2) * cos(a) + 0.015 * sin(a), y + (r + 0.2) * sin(a) - 0.015 * cos(a));
+    glVertex2d(x + (r + 0.2) * cos(a) - 0.015 * sin(a), y + (r + 0.2) * sin(a) + 0.015 * cos(a));
 
     glEnd();
     glColor3ub(0, 0, 0);
     glBegin(GL_LINE_LOOP);
 
-    glVertex2d(x - 0.1 * cos(a) - 0.015 * sin(a), y - 0.1 * sin(a) - 0.015 * cos(a));
-    glVertex2d(x - 0.1 * cos(a) + 0.015 * sin(a), y - 0.1 * sin(a) + 0.015 * cos(a));
-    glVertex2d(x + r * cos(a) + 0.015 * sin(a), y + r * sin(a) + 0.015 * cos(a));
-    glVertex2d(x + r * cos(a) - 0.015 * sin(a), y + r * sin(a) - 0.015 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) - 0.015 * sin(a), y - 0.1 * sin(a) + 0.015 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) + 0.015 * sin(a), y - 0.1 * sin(a) - 0.015 * cos(a));
+    glVertex2d(x + (r + 0.2) * cos(a) + 0.015 * sin(a), y + (r + 0.2) * sin(a) - 0.015 * cos(a));
+    glVertex2d(x + (r + 0.2) * cos(a) - 0.015 * sin(a), y + (r + 0.2) * sin(a) + 0.015 * cos(a));
 
     glEnd();
 
@@ -362,7 +362,6 @@ void drawPendulum(double x, double y, double a, double r) {
     drawPolygon(x + r * cos(a), y + r * sin(a), -a, 0.15, 50);
 
     // アンクル
-    glColor4dv(color);
     glBegin(GL_TRIANGLES);
 
     glVertex2d(x + 0.078 * sin(a + M_PI / 12) + 0.04 * cos(a), y - 0.078 * cos(a + M_PI / 12) + 0.04 * sin(a));
