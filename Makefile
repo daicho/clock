@@ -1,6 +1,6 @@
 TARGET = clock.exe
 
-SRCS = clock.c
+SRCS = clock.c shape.c
 
 OBJS = ${SRCS:.c=.o}
 
