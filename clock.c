@@ -145,39 +145,46 @@ void Display(void) {
     // 描画
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3ub(200, 200, 200);
-    drawPendulum(x0, y0 + r4 + rg + r + 0.035, rp, -M_PI_2 + M_PI / 40 * sin(tt * wp + ap));
+    drawPendulum(x0, y0 + r4 + rg + r + 0.050, rp, -M_PI_2 + M_PI / 40 * sin(tt * wp + ap));
+    drawPolygon(x0, y0 + r4 + rg + r + 0.050, 0, 0.008, 20);
 
     drawGangi(x0, y0 + r4 + r, tp * wg + ag, rg, lg, ng);
     drawKana(x0, y0 + r4 + r, tp * wg + ag, r, l, n);
+    drawPolygon(x0, y0 + r4 + r, 0, 0.012, 20);
 
     drawGear(x0, y0, tp * w4 + a4, r4, l, n4);
     drawKana(x0, y0, tp * w4 + a4, r, l, n);
 
     drawGear(x0 + r0 + r, y0, tp * w0 + a0, r0, l, n0);
     drawKana(x0 + r0 + r, y0, tp * w0 + a0, r, l, n);
+    drawPolygon(x0 + r0 + r, y0, 0, 0.012, 20);
 
     drawGear(x0, y0 - r3 - r, tp * w3 + a3, r3, l, n3);
     drawKana(x0, y0 - r3 - r, tp * w3 + a3, r, l, n);
+    drawPolygon(x0, y0 - r3 - r, 0, 0.012, 20);
 
     drawGear(x0, y0, tp * w2 + a2, r2, l, n2);
     drawKana(x0, y0, tp * w2 + a2, r, l, n);
 
     drawGear(x0 - r1 - r, y0, tp * w1 + a1, r1, l, n1);
     drawKana(x0 - r1 - r, y0, tp * w1 + a1, r, l, n);
+    drawPolygon(x0 - r1 - r, y0, 0, 0.012, 20);
 
     putSprite(dial_img, x0 - 0.6, y0 - 0.6, 1.2, 1.2, &dial_info);
 
     drawGear(x0 + r5 + r, y0, tp * w5 + a5, r5, l, n5);
     drawKana(x0 + r5 + r, y0, tp * w5 + a5, r, l, n);
+    drawPolygon(x0 + r5 + r, y0, 0, 0.012, 20);
 
     drawGear(x0, y0, tp * w6 + a6, r6, l, n6);
     drawKana(x0, y0, tp * w6 + a6, r, l, n);
 
     // 針描画
-    glColor3ub(0, 0, 0);
+    glColor3ub(255, 255, 255);
     drawHand(x0, y0, lh, ah);
     drawHand(x0, y0, lm, am);
     drawHand(x0, y0, ls, as);
+    drawPolygon(x0, y0, 0, 0.012, 20);
 
     glFlush();
 }

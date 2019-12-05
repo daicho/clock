@@ -5,6 +5,33 @@
 
 #include "shape.h"
 
+// 正多角形
+void drawPolygon(double x, double y, double a, double r, int n) {
+    int i;
+    double w = 2 * M_PI / n;
+    GLdouble color[4];
+
+    // 現在の色を取得
+    glGetDoublev(GL_CURRENT_COLOR, color);
+
+    glBegin(GL_POLYGON);
+
+    for (i = 0; i < n; i++) {
+        glVertex2d(x + r * sin(i * w + a), y + r * cos(i * w + a));
+    }
+
+    glEnd();
+    glColor3ub(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
+
+    for (i = 0; i < n; i++) {
+        glVertex2d(x + r * sin(i * w + a), y + r * cos(i * w + a));
+    }
+
+    glEnd();
+    glColor4dv(color);
+}
+
 // 歯車
 void drawGear(double x, double y, double a, double r, double l, int n) {
     int i;
@@ -18,22 +45,16 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     // 円
     glBegin(GL_QUAD_STRIP);
 
-    for (i = 0; i <= n * 2; i += 2) {
+    for (i = 0; i <= n * 2; i++) {
         glVertex2d(x + (r - l * 1.5) * cos(i * w + a), y + (r - l * 1.5) * sin(i * w + a));
         glVertex2d(x + (r - l / 2) * cos(i * w + a), y + (r - l / 2) * sin(i * w + a));
     }
 
     glEnd();
-    glBegin(GL_POLYGON);
-
-    for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + 0.045 * sin(i * w + a), y + 0.045 * cos(i * w + a));
-    }
-
-    glEnd();
+    drawPolygon(x, y, a, 0.045, n * 2);
 
     // 歯
-    glColor3dv(color);
+    glColor4dv(color);
     glBegin(GL_QUADS);
 
     for (i = 0; i < n * 2; i += 2) {
@@ -46,21 +67,9 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     glEnd();
 
     // 縁線
-    glColor3ub(0, 0, 0);
-    glBegin(GL_LINE_LOOP);
-
-    for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + 0.045 * sin(i * w + a), y + 0.045 * cos(i * w + a));
-    }
-
-    glEnd();
-    glBegin(GL_LINE_LOOP);
-
-    for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + (r - l * 1.5) * sin(i * w + a), y + (r - l * 1.5) * cos(i * w + a));
-    }
-
-    glEnd();
+    glColor4ub(0, 0, 0, 0);
+    drawPolygon(x, y, a, r - l * 1.5, n * 2);
+    glColor4ub(0, 0, 0, 255);
     glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < 2 * n; i++) {
@@ -76,7 +85,7 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     glEnd();
 
     // 骨組み
-    glColor3dv(color);
+    glColor4dv(color);
     glBegin(GL_QUADS);
 
     for (i = 0; i < 5; i++) {
@@ -98,7 +107,7 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     }
 
     glEnd();
-    glColor3dv(color);
+    glColor4dv(color);
 }
 
 // カナ(小さい歯車)
@@ -120,7 +129,7 @@ void drawKana(double x, double y, double a, double r, double l, int n) {
     glEnd();
 
     // 歯
-    glColor3dv(color);
+    glColor4dv(color);
     glBegin(GL_QUADS);
 
     for (i = 0; i < n * 2; i += 2) {
@@ -147,7 +156,7 @@ void drawKana(double x, double y, double a, double r, double l, int n) {
     }
 
     glEnd();
-    glColor3dv(color);
+    glColor4dv(color);
 }
 
 // ガンギ車
@@ -170,13 +179,7 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     }
 
     glEnd();
-    glBegin(GL_POLYGON);
-
-    for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + 0.045 * sin(i * w + a), y + 0.045 * cos(i * w + a));
-    }
-
-    glEnd();
+    drawPolygon(x, y, a, 0.045, n);
 
     // 歯
     glBegin(GL_TRIANGLES);
@@ -190,21 +193,9 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     glEnd();
 
     // 縁線
-    glColor3ub(0, 0, 0);
-    glBegin(GL_LINE_LOOP);
-
-    for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + 0.045 * sin(i * w + a), y + 0.045 * cos(i * w + a));
-    }
-
-    glEnd();
-    glBegin(GL_LINE_LOOP);
-
-    for (i = 0; i < n * 2; i++) {
-        glVertex2d(x + (r - l) * sin(i * w + a), y + (r - l) * cos(i * w + a));
-    }
-
-    glEnd();
+    glColor4ub(0, 0, 0, 0);
+    drawPolygon(x, y, a, r - l, n);
+    glColor4ub(0, 0, 0, 255);
     glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < n; i++) {
@@ -215,7 +206,7 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     glEnd();
 
     // 骨組み
-    glColor3dv(color);
+    glColor4dv(color);
     glBegin(GL_QUADS);
 
     for (i = 0; i < 5; i++) {
@@ -237,15 +228,34 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     }
 
     glEnd();
-    glColor3dv(color);
+    glColor4dv(color);
 }
 
 // 針
 void drawHand(double x, double y, double r, double a) {
-    glBegin(GL_LINES);
-    glVertex2d(x, y);
+    GLdouble color[4];
+
+    // 現在の色を取得
+    glGetDoublev(GL_CURRENT_COLOR, color);
+
+    glBegin(GL_QUADS);
+
+    glVertex2d(x - 0.06 * cos(a), y - 0.06 * sin(a));
+    glVertex2d(x + 0.02 * sin(a), y - 0.02 * cos(a));
     glVertex2d(x + r * cos(a), y + r * sin(a));
+    glVertex2d(x - 0.02 * sin(a), y + 0.02 * cos(a));
+
     glEnd();
+    glColor3ub(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
+
+    glVertex2d(x - 0.06 * cos(a), y - 0.06 * sin(a));
+    glVertex2d(x + 0.02 * sin(a), y - 0.02 * cos(a));
+    glVertex2d(x + r * cos(a), y + r * sin(a));
+    glVertex2d(x - 0.02 * sin(a), y + 0.02 * cos(a));
+
+    glEnd();
+    glColor4dv(color);
 }
 
 // 振り子
@@ -260,77 +270,63 @@ void drawPendulum(double x, double y, double r, double a) {
     // 棒
     glBegin(GL_QUADS);
 
-    glVertex2d(x - 0.1 * cos(a) - 0.01 * sin(a), y - 0.1 * sin(a) - 0.01 * cos(a));
-    glVertex2d(x - 0.1 * cos(a) + 0.01 * sin(a), y - 0.1 * sin(a) + 0.01 * cos(a));
-    glVertex2d(x + r * cos(a) + 0.01 * sin(a), y + r * sin(a) + 0.01 * cos(a));
-    glVertex2d(x + r * cos(a) - 0.01 * sin(a), y + r * sin(a) - 0.01 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) - 0.015 * sin(a), y - 0.1 * sin(a) - 0.015 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) + 0.015 * sin(a), y - 0.1 * sin(a) + 0.015 * cos(a));
+    glVertex2d(x + r * cos(a) + 0.015 * sin(a), y + r * sin(a) + 0.015 * cos(a));
+    glVertex2d(x + r * cos(a) - 0.015 * sin(a), y + r * sin(a) - 0.015 * cos(a));
 
     glEnd();
     glColor3ub(0, 0, 0);
     glBegin(GL_LINE_LOOP);
 
-    glVertex2d(x - 0.1 * cos(a) - 0.01 * sin(a), y - 0.1 * sin(a) - 0.01 * cos(a));
-    glVertex2d(x - 0.1 * cos(a) + 0.01 * sin(a), y - 0.1 * sin(a) + 0.01 * cos(a));
-    glVertex2d(x + r * cos(a) + 0.01 * sin(a), y + r * sin(a) + 0.01 * cos(a));
-    glVertex2d(x + r * cos(a) - 0.01 * sin(a), y + r * sin(a) - 0.01 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) - 0.015 * sin(a), y - 0.1 * sin(a) - 0.015 * cos(a));
+    glVertex2d(x - 0.1 * cos(a) + 0.015 * sin(a), y - 0.1 * sin(a) + 0.015 * cos(a));
+    glVertex2d(x + r * cos(a) + 0.015 * sin(a), y + r * sin(a) + 0.015 * cos(a));
+    glVertex2d(x + r * cos(a) - 0.015 * sin(a), y + r * sin(a) - 0.015 * cos(a));
 
     glEnd();
 
     // 重り
-    glColor3dv(color);
-    glBegin(GL_POLYGON);
-
-    for (i = 0; i < 50; i++) {
-        glVertex2d(x + r * cos(a) + 0.15 * sin(i * w + a), y + r * sin(a) - 0.15 * cos(i * w + a));
-    }
-
-    glEnd();
-    glColor3ub(0, 0, 0);
-    glBegin(GL_LINE_LOOP);
-
-    for (i = 0; i < 100; i++) {
-        glVertex2d(x + r * cos(a) + 0.15 * sin(i * w + a), y + r * sin(a) - 0.15 * cos(i * w + a));
-    }
-
-    glEnd();
+    glColor4dv(color);
+    drawPolygon(x + r * cos(a), y + r * sin(a), -a, 0.15, 50);
 
     // アンクル
-    glColor3dv(color);
+    glColor4dv(color);
     glBegin(GL_TRIANGLES);
 
-    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12) + 0.02 * sin(a));
-    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12));
-    glVertex2d(x - 0.01 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.01 * sin(a) - 0.10 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.074 * sin(a + M_PI / 12) + 0.03 * cos(a), y - 0.074 * cos(a + M_PI / 12) + 0.03 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x - 0.015 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.015 * sin(a) - 0.10 * cos(a + M_PI / 12));
 
-    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) + 0.074 * cos(a - M_PI / 12) + 0.02 * sin(a));
-    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12));
-    glVertex2d(x - 0.01 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.074 * sin(a - M_PI / 12) + 0.03 * cos(a), y + 0.074 * cos(a - M_PI / 12) + 0.03 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.015 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
 
     glEnd();
     glBegin(GL_QUAD_STRIP);
 
-    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12));
-    glVertex2d(x - 0.01 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.01 * sin(a) - 0.10 * cos(a + M_PI / 12));
-    glVertex2d(x + 0.01 * cos(a), y + 0.01 * sin(a));
-    glVertex2d(x - 0.01 * cos(a), y - 0.01 * sin(a));
-    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12));
-    glVertex2d(x - 0.01 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
+    glVertex2d(x + 0.015 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x - 0.015 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.015 * sin(a) - 0.10 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.015 * cos(a), y + 0.015 * sin(a));
+    glVertex2d(x - 0.015 * cos(a), y - 0.015 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.015 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.015 * sin(a) + 0.10 * cos(a - M_PI / 12));
 
     glEnd();
     glColor3ub(0, 0, 0);
     glBegin(GL_LINE_LOOP);
 
-    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12) + 0.02 * sin(a));
-    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12));
-    glVertex2d(x + 0.01 * cos(a), y + 0.01 * sin(a));
-    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12));
-    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) + 0.074 * cos(a - M_PI / 12) + 0.02 * sin(a));
-    glVertex2d(x - 0.01 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
-    glVertex2d(x - 0.01 * cos(a), y - 0.01 * sin(a));
-    glVertex2d(x - 0.01 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.01 * sin(a) - 0.10 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.074 * sin(a + M_PI / 12) + 0.03 * cos(a), y - 0.074 * cos(a + M_PI / 12) + 0.03 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.015 * cos(a), y + 0.015 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.074 * sin(a - M_PI / 12) + 0.03 * cos(a), y + 0.074 * cos(a - M_PI / 12) + 0.03 * sin(a));
+    glVertex2d(x - 0.015 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.015 * sin(a) + 0.10 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.015 * cos(a), y - 0.015 * sin(a));
+    glVertex2d(x - 0.015 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.015 * sin(a) - 0.10 * cos(a + M_PI / 12));
 
     glEnd();
-    glColor3dv(color);
+    glColor4dv(color);
 }
 
 // 画像表示

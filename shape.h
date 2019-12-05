@@ -1,6 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+void drawPolygon(double, double, double, double, int);
 void drawGear(double, double, double, double, double, int);
 void drawKana(double, double, double, double, double, int);
 void drawGangi(double, double, double, double, double, int);
