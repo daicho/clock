@@ -14,7 +14,6 @@
 void Display(void);
 void Reshape(int, int);
 void Timer(int);
-void putSprite(GLuint, double, double, double, double, pngInfo *);
 
 // 時刻
 long double t;
@@ -62,7 +61,7 @@ void Display(void) {
 
     int tictac = (tt - (int)tt) * 2;
     double decimal = (tt - (int)tt) * 2 - tictac;
-    double tp = (int)tt + (pow(decimal, 100) + tictac) / 2;
+    double tp = (int)tt + (pow(decimal, 10) + tictac) / 2;
 
     double sec = t_st->tm_sec + tp - (int)tt;
     double min = t_st->tm_min + sec / 60;
@@ -84,6 +83,7 @@ void Display(void) {
 
     // 歯の長さ
     double l = 0.01;
+    double lg = 0.02;
 
     // カナを1とした時のギア比
     double p0 = 9;
@@ -105,7 +105,7 @@ void Display(void) {
     double r5 = r * p5;
     double r6 = r * p6;
     double rg = r * pg;
-    double rp = r * 40;
+    double rp = r * 45;
 
     // ギア数
     double n = 8;
@@ -137,16 +137,15 @@ void Display(void) {
     double a4 = M_PI / n4;
     double a5 = M_PI / 4;
     double a6 = M_PI / 4;
-    double ag = M_PI / 4;
-    double ap = 0.5;
+    double ag = 0;
+    double ap = 0.9;
 
     // 描画
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3ub(0, 0, 0);
-    drawPendulum(x0, y0 + r4 + rg + r + 0.01, rp, 3 * M_PI_2 + 0.1 * sin(tt * wp + ap));
-
     glColor3ub(200, 200, 200);
-    drawGangi(x0, y0 + r4 + r, tp * wg + ag, rg, 0.02, ng);
+    drawPendulum(x0, y0 + r4 + rg + r + 0.035, rp, -M_PI_2 + M_PI / 40 * sin(tt * wp + ap));
+
+    drawGangi(x0, y0 + r4 + r, tp * wg + ag, rg, lg, ng);
     drawKana(x0, y0 + r4 + r, tp * wg + ag, r, l, n);
 
     drawGear(x0, y0, tp * w4 + a4, r4, l, n4);
@@ -203,34 +202,4 @@ void Timer(int value) {
     t = tv.tv_sec + tv.tv_usec * 1e-6;
 
     Display();
-}
-
-// 画像表示
-void putSprite(GLuint num, double x, double y, double w, double h, pngInfo *info) { 
-    float color[4];
-
-    // 現在の色を取得
-    glGetFloatv(GL_CURRENT_COLOR, color);
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, num);
-    glColor4ub(255, 255, 255, 255);
-
-    glBegin(GL_QUADS);
-    
-    glTexCoord2i(0, 0);
-    glVertex2d(x, y);
-    
-    glTexCoord2i(0, 1);
-    glVertex2d(x, y + h);
-    
-    glTexCoord2i(1, 1);
-    glVertex2d(x + w, y + h);
-    
-    glTexCoord2i(1, 0);
-    glVertex2d(x + w, y);
-
-    glEnd();
-    glColor3fv(color);
-    glDisable(GL_TEXTURE_2D);
 }
