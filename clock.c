@@ -145,8 +145,8 @@ void Display(void) {
     // 描画
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3ub(200, 200, 200);
-    drawPendulum(x0, y0 + r4 + rg + r + 0.050, rp, -M_PI_2 + M_PI / 40 * sin(tt * wp + ap));
-    drawPolygon(x0, y0 + r4 + rg + r + 0.050, 0, 0.008, 20);
+    drawPendulum(x0, y0 + r4 + rg + r + 0.047, rp, -M_PI_2 + M_PI / 40 * sin(tt * wp + ap));
+    drawPolygon(x0, y0 + r4 + rg + r + 0.047, 0, 0.008, 20);
 
     drawGangi(x0, y0 + r4 + r, tp * wg + ag, rg, lg, ng);
     drawKana(x0, y0 + r4 + r, tp * wg + ag, r, l, n);

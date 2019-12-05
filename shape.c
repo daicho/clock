@@ -165,7 +165,7 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     double w = -2 * M_PI / n;
     double ws = 2 * M_PI / 5;
     GLdouble color[4];
-    a += 0.115;
+    a += 0.13;
 
     // 現在の色を取得
     glGetDoublev(GL_CURRENT_COLOR, color);
@@ -294,33 +294,33 @@ void drawPendulum(double x, double y, double r, double a) {
     glColor4dv(color);
     glBegin(GL_TRIANGLES);
 
-    glVertex2d(x + 0.074 * sin(a + M_PI / 12) + 0.03 * cos(a), y - 0.074 * cos(a + M_PI / 12) + 0.03 * sin(a));
-    glVertex2d(x + 0.015 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.077 * sin(a + M_PI / 12) + 0.04 * cos(a), y - 0.077 * cos(a + M_PI / 12) + 0.04 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) + 0.077 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.077 * cos(a + M_PI / 12));
     glVertex2d(x - 0.015 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.015 * sin(a) - 0.10 * cos(a + M_PI / 12));
 
-    glVertex2d(x - 0.074 * sin(a - M_PI / 12) + 0.03 * cos(a), y + 0.074 * cos(a - M_PI / 12) + 0.03 * sin(a));
-    glVertex2d(x + 0.015 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.077 * sin(a - M_PI / 12) + 0.04 * cos(a), y + 0.077 * cos(a - M_PI / 12) + 0.04 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) - 0.077 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.077 * cos(a - M_PI / 12));
     glVertex2d(x - 0.015 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
 
     glEnd();
     glBegin(GL_QUAD_STRIP);
 
-    glVertex2d(x + 0.015 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.015 * cos(a) + 0.077 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.077 * cos(a + M_PI / 12));
     glVertex2d(x - 0.015 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.015 * sin(a) - 0.10 * cos(a + M_PI / 12));
     glVertex2d(x + 0.015 * cos(a), y + 0.015 * sin(a));
     glVertex2d(x - 0.015 * cos(a), y - 0.015 * sin(a));
-    glVertex2d(x + 0.015 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x + 0.015 * cos(a) - 0.077 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.077 * cos(a - M_PI / 12));
     glVertex2d(x - 0.015 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.015 * sin(a) + 0.10 * cos(a - M_PI / 12));
 
     glEnd();
     glColor3ub(0, 0, 0);
     glBegin(GL_LINE_LOOP);
 
-    glVertex2d(x + 0.074 * sin(a + M_PI / 12) + 0.03 * cos(a), y - 0.074 * cos(a + M_PI / 12) + 0.03 * sin(a));
-    glVertex2d(x + 0.015 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.077 * sin(a + M_PI / 12) + 0.04 * cos(a), y - 0.077 * cos(a + M_PI / 12) + 0.04 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) + 0.077 * sin(a + M_PI / 12), y + 0.015 * sin(a) - 0.077 * cos(a + M_PI / 12));
     glVertex2d(x + 0.015 * cos(a), y + 0.015 * sin(a));
-    glVertex2d(x + 0.015 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.075 * cos(a - M_PI / 12));
-    glVertex2d(x - 0.074 * sin(a - M_PI / 12) + 0.03 * cos(a), y + 0.074 * cos(a - M_PI / 12) + 0.03 * sin(a));
+    glVertex2d(x + 0.015 * cos(a) - 0.077 * sin(a - M_PI / 12), y + 0.015 * sin(a) + 0.077 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.077 * sin(a - M_PI / 12) + 0.04 * cos(a), y + 0.077 * cos(a - M_PI / 12) + 0.04 * sin(a));
     glVertex2d(x - 0.015 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.015 * sin(a) + 0.10 * cos(a - M_PI / 12));
     glVertex2d(x - 0.015 * cos(a), y - 0.015 * sin(a));
     glVertex2d(x - 0.015 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.015 * sin(a) - 0.10 * cos(a + M_PI / 12));
