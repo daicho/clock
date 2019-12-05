@@ -150,7 +150,7 @@ void drawKana(double x, double y, double a, double r, double l, int n) {
     glColor3dv(color);
 }
 
-// ガンギ車 
+// ガンギ車
 void drawGangi(double x, double y, double a, double r, double l, int n) {
     int i;
     double w = -2 * M_PI / n;
@@ -281,27 +281,50 @@ void drawPendulum(double x, double y, double r, double a) {
     glBegin(GL_POLYGON);
 
     for (i = 0; i < 50; i++) {
-        glVertex2d(x + r * cos(a) + 0.15 * sin(i * w + a), y + r * sin(a) + 0.15 * cos(i * w + a));
+        glVertex2d(x + r * cos(a) + 0.15 * sin(i * w + a), y + r * sin(a) - 0.15 * cos(i * w + a));
     }
 
     glEnd();
     glColor3ub(0, 0, 0);
-    glLineWidth(1);
     glBegin(GL_LINE_LOOP);
 
     for (i = 0; i < 100; i++) {
-        glVertex2d(x + r * cos(a) + 0.15 * sin(i * w + a), y + r * sin(a) + 0.15 * cos(i * w + a));
+        glVertex2d(x + r * cos(a) + 0.15 * sin(i * w + a), y + r * sin(a) - 0.15 * cos(i * w + a));
     }
 
     glEnd();
 
     // アンクル
-    glBegin(GL_LINE_LOOP);
-    glVertex2d(x + 0.01 * cos(a) + 0.075 * sin(a + M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) - 0.075 * cos(a + M_PI / 12) + 0.02 * sin(a));
-    glVertex2d(x + 0.01 * cos(a) + 0.075 * sin(a + M_PI / 12), y + 0.01 * sin(a) - 0.075 * cos(a + M_PI / 12));
+    glColor3dv(color);
+    glBegin(GL_TRIANGLES);
+
+    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12) + 0.02 * sin(a));
+    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x - 0.01 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.01 * sin(a) - 0.10 * cos(a + M_PI / 12));
+
+    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) + 0.074 * cos(a - M_PI / 12) + 0.02 * sin(a));
+    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.01 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
+
+    glEnd();
+    glBegin(GL_QUAD_STRIP);
+
+    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x - 0.01 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.01 * sin(a) - 0.10 * cos(a + M_PI / 12));
     glVertex2d(x + 0.01 * cos(a), y + 0.01 * sin(a));
-    glVertex2d(x + 0.01 * cos(a) - 0.075 * sin(a - M_PI / 12), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12));
-    glVertex2d(x + 0.01 * cos(a) - 0.075 * sin(a - M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12) + 0.02 * sin(a));
+    glVertex2d(x - 0.01 * cos(a), y - 0.01 * sin(a));
+    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x - 0.01 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
+
+    glEnd();
+    glColor3ub(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
+
+    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12) + 0.02 * sin(a));
+    glVertex2d(x + 0.01 * cos(a) + 0.074 * sin(a + M_PI / 12), y + 0.01 * sin(a) - 0.074 * cos(a + M_PI / 12));
+    glVertex2d(x + 0.01 * cos(a), y + 0.01 * sin(a));
+    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12), y + 0.01 * sin(a) + 0.075 * cos(a - M_PI / 12));
+    glVertex2d(x + 0.01 * cos(a) - 0.074 * sin(a - M_PI / 12) + 0.02 * cos(a), y + 0.01 * sin(a) + 0.074 * cos(a - M_PI / 12) + 0.02 * sin(a));
     glVertex2d(x - 0.01 * cos(a) - 0.10 * sin(a - M_PI / 12), y - 0.01 * sin(a) + 0.10 * cos(a - M_PI / 12));
     glVertex2d(x - 0.01 * cos(a), y - 0.01 * sin(a));
     glVertex2d(x - 0.01 * cos(a) + 0.10 * sin(a + M_PI / 12), y - 0.01 * sin(a) - 0.10 * cos(a + M_PI / 12));
@@ -311,7 +334,7 @@ void drawPendulum(double x, double y, double r, double a) {
 }
 
 // 画像表示
-void putSprite(GLuint num, double x, double y, double w, double h, pngInfo *info) { 
+void putSprite(GLuint num, double x, double y, double w, double h, pngInfo *info) {
     float color[4];
 
     // 現在の色を取得
@@ -322,16 +345,16 @@ void putSprite(GLuint num, double x, double y, double w, double h, pngInfo *info
     glColor4ub(255, 255, 255, 255);
 
     glBegin(GL_QUADS);
-    
+
     glTexCoord2i(0, 0);
     glVertex2d(x, y);
-    
+
     glTexCoord2i(0, 1);
     glVertex2d(x, y + h);
-    
+
     glTexCoord2i(1, 1);
     glVertex2d(x + w, y + h);
-    
+
     glTexCoord2i(1, 0);
     glVertex2d(x + w, y);
 

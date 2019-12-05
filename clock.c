@@ -7,6 +7,7 @@
 #include <GL/glut.h>
 #include <GL/glpng.h>
 
+#include "clock.h"
 #include "shape.h"
 
 #define FPS 60
@@ -56,12 +57,13 @@ int main(int argc, char *argv[]) {
 
 void Display(void) {
     long double tt = st + (t - st) * 1;
+
     time_t tv_sec = (int)tt;
     struct tm *t_st = localtime(&tv_sec);
 
     int tictac = (tt - (int)tt) * 2;
     double decimal = (tt - (int)tt) * 2 - tictac;
-    double tp = (int)tt + (pow(decimal, 10) + tictac) / 2;
+    double tp = (int)tt + (pow(decimal, 6) + tictac) / 2;
 
     double sec = t_st->tm_sec + tp - (int)tt;
     double min = t_st->tm_min + sec / 60;
@@ -105,7 +107,7 @@ void Display(void) {
     double r5 = r * p5;
     double r6 = r * p6;
     double rg = r * pg;
-    double rp = r * 45;
+    double rp = r * 48;
 
     // ギア数
     double n = 8;
@@ -138,7 +140,7 @@ void Display(void) {
     double a5 = M_PI / 4;
     double a6 = M_PI / 4;
     double ag = 0;
-    double ap = 0.9;
+    double ap = 0.5;
 
     // 描画
     glClear(GL_COLOR_BUFFER_BIT);
