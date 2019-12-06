@@ -4,7 +4,7 @@ SRCS = clock.c shape.c
 
 OBJS = ${SRCS:.c=.o}
 
-HEADERS =
+HEADERS = clock.h shape.h
 
 CC = gcc
 CCFLAGS = -Wall -I/usr/include/opengl
