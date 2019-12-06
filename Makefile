@@ -24,4 +24,3 @@ $(OBJS) : $(HEADERS) Makefile
 
 clean :
 	rm -f $(TARGET) $(OBJS) core *-
-	rm -f myicon.o
