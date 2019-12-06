@@ -331,8 +331,6 @@ void drawSecond(double x, double y, double a, double r) {
 
 // 振り子
 void drawPendulum(double x, double y, double a, double r) {
-    int i;
-    double w = M_PI / 25;
     GLdouble color[4];
 
     // 現在の色を取得
