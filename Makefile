@@ -15,18 +15,18 @@ LD = gcc
 LDFLAGS =
 LIBS = -lm -lglpng -lglut32 -lglu32 -lopengl32
 
-$(TARGET) : $(OBJS)
+$(TARGET): $(OBJS)
 	$(LD) $(OBJS) $(LDFLAGS) -o $(TARGET) $(LIBS)
 
 .SUFFIXES: .o .c
-.c.o :
+.c.o:
 	$(CC) $(CCFLAGS) -c $<
 
-$(OBJS) : $(HEADERS) Makefile
+$(OBJS): $(HEADERS) Makefile
 
-$(ICON_OBJ) : $(ICON) $(ICON_RC)
+$(ICON_OBJ): $(ICON) $(ICON_RC)
 	windres -i $(ICON_RC) -o $(ICON_OBJ)
 
 .PHONY: clean
-clean :
+clean:
 	rm -f $(TARGET) $(OBJS) core *-

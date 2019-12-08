@@ -2,11 +2,10 @@
 #define CLOCK_H
 
 void Display(void);
-void Reshape(int, int);
-void Timer(int);
+void Reshape(int w, int h);
+void Timer(int value);
 
 extern long double t;
-extern long double st;
 extern GLuint dial_img;
 extern pngInfo dial_info;
 
