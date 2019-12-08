@@ -187,10 +187,10 @@ void Display(void) {
 
     // 3番車
     glColor3ubv(gearColor);
-    drawGear(x0, y0 - r3 - rk, tt * w3 + a3, r3, l, n3);
-    drawKana(x0, y0 - r3 - rk, tt * w3 + a3, rk, l, nk);
+    drawGear(x0, y0 - r2 - rk, tt * w3 + a3, r3, l, n3);
+    drawKana(x0, y0 - r2 - rk, tt * w3 + a3, rk, l, nk);
     glColor3ubv(axisColor);
-    drawPolygon(x0, y0 - r3 - rk, 0, 0.012, 20);
+    drawPolygon(x0, y0 - r2 - rk, 0, 0.012, 20);
 
     // 2番車
     glColor3ubv(gearColor);
