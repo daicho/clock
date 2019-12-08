@@ -122,7 +122,7 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     glColor4dv(color);
 }
 
-// カナ(小さい歯車)を描画
+// カナを描画
 // x, y : 座標
 // a : 角度
 // r : 半径
