@@ -190,7 +190,7 @@ void drawGangi(double x, double y, double a, double r, double l, int n) {
     double wf = 2 * M_PI / 5;
 
     // アンクルと噛み合うように角度調整
-    a += 0.04;
+    a += 0.03;
 
     // 現在の色を保存
     glGetDoublev(GL_CURRENT_COLOR, color);
@@ -391,7 +391,7 @@ void drawPendulum(double x, double y, double a, double r) {
     double ha = 0.015;     // アンクルの幅
     double lt = 0.04;      // アンクルの先端の長さ
     double lu = 0.10;      // アンクル上部の長さ
-    double lc = 0.078;     // アンクル中部の長さ
+    double lc = 0.079;     // アンクル中部の長さ
     double ld = 0.07;      // アンクル下部の長さ
 
     // 現在の色を保存
