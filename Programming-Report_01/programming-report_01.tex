@@ -4,6 +4,8 @@
 \usepackage[top=20truemm,left=25truemm,right=25truemm]{geometry}
 \usepackage{amsmath}
 \usepackage{here}
+\usepackage{comment}
+\usepackage{url}
 \usepackage{plistings}
 \usepackage{tikz}
 \usepackage[framemethod=tikz]{mdframed}
@@ -32,7 +34,7 @@
 }
 
 \lstdefinestyle{make}{
-  language=[gnu] make,
+  language=,
   basicstyle=\small\ttfamily,
   keywordstyle=\color[HTML]{0000E0},
   stringstyle=\color[HTML]{A31515},
@@ -90,6 +92,15 @@ OpenGL (Open Graphics Library)に準拠したC言語のライブラリ``GLUT (Op
 インタラクティブなユーザーインターフェースを実現する。
 
 
+\section{作成したアナログ時計}
+内部の歯車や振り子が透けて見えるような振り子時計を作成した。
+歯車や振り子などのパーツはGLUTの関数を用いて描画し、
+時間変化に応じて現実の時計と同じような仕組みで動作する。
+
+また、ウィンドウのサイズを変更したときに自動的に時計の大きさが変わり、
+ウィンドウの領域を最大限に利用して表示されるような機能も実装した。
+
+
 \section{開発環境}
 プログラムの開発、実行を行った環境を表\ref{tb:kan}に示す。
 
@@ -104,7 +115,7 @@ OpenGL (Open Graphics Library)に準拠したC言語のライブラリ``GLUT (Op
     メモリ & 8GB \\ \hline
     OS & Microsoft Windows 10 Home \\ \hline
     システム & 64bit \\ \hline
-    実行環境 & Cygwin 3.0.7-1 \\ \hline
+    実行環境 & Cygwin 3.0.7 \\ \hline
     コンパイラ & GCC 7.4.0 \\ \hline
     OpenGLライブラリ & GLUT 3.7 \\ \hline
   \end{tabular}
@@ -123,12 +134,11 @@ GLUの機能に加え、ウィンドウ作成やイベント処理などの機�
 
 
 \section{振り子時計の動作原理 \cite{bib:2}}
-今回は、内部の歯車や振り子が透けて見えるような振り子時計を作成した。
 振り子時計を構成するパーツは図\ref{fig:parts}のようになっている。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=12cm]{動作原理.pdf}
+  \includegraphics[width=10cm]{動作原理.pdf}
   \caption{振り子時計のパーツ}
   \label{fig:parts}
 \end{figure}
@@ -146,175 +156,115 @@ GLUの機能に加え、ウィンドウ作成やイベント処理などの機�
 なお、今回作成したプログラムでは、見栄えを良くするためにダミーの歯車を1つ追加した。これを0番車と呼ぶことにする。
 
 
-\section{YAMLについて}
-YAML (YAML Ain't a Markup Language)はXMLのように構造化されたデータを、XMLよりも人間に読み書きしやすい形にしたものである。
-アプリケーションでbbs.dbを扱うために、ソースコード\ref{yml}ようにdatabase.ymlを作成する。
-プログラム内でこのファイルを読み込むと、指定したデータベースを操作できるようになる。
-
-\lstinputlisting[style=yaml,caption=database.yml,label=yml]{bbs/database.yml}
-
-
-\section{ActiveRecordについて}
-ActiveRecordはデータベースのレコードをオブジェクト指向言語のオブジェクトに対応させるライブラリである。
-そうすることでオブジェクト指向言語でオブジェクトを操作すると、
-内部的にデータベース管理システムのコマンドを発行し、
-適切にデータベースを操作して結果を返してくれる。
-SQLite3やMySQLなどのデータベース管理システムの違いをActiveRecordが吸収することで、
-様々なデータベースをオブジェクト指向言語のオブジェクトへ対応させている。
-
-
-\section{Webアプリケーションの構造}
-今回作成したアプリケーションでは、処理部分と表示部分を分離させている。
-処理本体はRubyで記述するが、表示はHTMLコードの中にRubyのコードを埋め込むことができるEmbedded Rubyで記述する。
-Embedded Rubyは、表\ref{erb}に示すルールでRubyのコードを埋め込むことができる。
-
-\begin{table}[H]
-  \centering
-  \caption{erbのルール}
-  \label{erb}
-  \begin{tabular}{|l|l|}
-    \hline
-    \chuo{記述} & \chuo{意味} \\ \hline \hline
-    {\tt\verb|<%= code %>|}    & 囲まれた部分を実行して結果を埋め込む。         \\ \hline
-    {\tt\verb|<% code %>|}     &  囲まれた部分を実行するが、結果は埋め込まない。 \\ \hline
-    {\tt\verb|<%# comment %>|} &  囲まれた部分をコメントアウトする。            \\ \hline
-  \end{tabular}
-\end{table}
-
-見た目を表すEmbedded Rubyのファイルは、viewsディレクトリの中に作成する。
-アプリケーションフォルダのディレクトリ構造を図\ref{dir}に示す。
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=3.5cm]{file.pdf}
-\caption{ディレクトリ構造}
-\label{dir}
-\end{figure}
-
-
 \section{プログラムリスト}
-図\ref{dir}で示した各プログラムのソースコードを、リスト\ref{main}-\ref{maincss}に示す。
+プログラムのソースコードを、リスト\ref{lst:clock_h}--\ref{lst:shape_c}に示す。
 
-\lstinputlisting[style=ruby,caption=bbs.rb,label=main]{bbs/bbs.rb}
+\lstinputlisting[style=C,caption=clock.h,label=lst:clock_h]{clock/clock.h}
 
-\lstinputlisting[style=html,caption=main.erb,label=index]{bbs/views/main.erb}
+\lstinputlisting[style=C,caption=clock.c,label=lst:clock_c]{clock/clock.c}
 
-\lstinputlisting[style=html,caption=error.erb,label=error]{bbs/views/error.erb}
+\lstinputlisting[style=C,caption=shape.h,label=lst:shape_h]{clock/shape.h}
 
-\lstinputlisting[style=css,caption=style.css,label=style]{bbs/public/style.css}
+\lstinputlisting[style=C,caption=shape.c,label=lst:shape_c]{clock/shape.c}
 
-\lstinputlisting[style=css,caption=main.css,label=maincss]{bbs/public/main.css}
+\lstinputlisting[style=make,caption=Makefile,label=lst:make]{clock/Makefile}
 
 
-\section{実装機能}
-\subsection{投稿}
-図\ref{f1}のように、名前とテキストを入力し、``Post''ボタンを押下すると掲示板にその内容が書き込まれる。
-書き込まれた様子を図\ref{f2}に示す。
-図\ref{f2}を見ると分かるように、投稿した日時も記録される。
+\section{リソース}
+プログラム中で用いられる文字盤の画像``dial.png''を図\ref{fig:dial}, アプリケーションのアイコン``icon.ico''を図\ref{fig:icon}に示す。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{bbs02.png}
-  \caption{投稿前の様子}
-  \label{f1}
+  \includegraphics[width=8cm]{clock/dial.png}
+  \caption{dial.png}
+  \label{fig:dial}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{bbs03.png}
-  \caption{投稿後の様子}
-  \label{f2}
+  \includegraphics[width=4cm]{clock/icon-48.png}
+  \caption{icon.ico}
+  \label{fig:icon}
 \end{figure}
 
-入力フォームのHTMLは、main.erbの83行目以降に実装されている。
-ボタンを押すと/newにPOSTし、それをサーバーサイドのプログラムbbs.rbの95行目でキャッチする。
-ここでは、投稿識別ID、名前、テキスト、日時を取得し、ActiveRecordを介してデータベースに投稿を記録している。
 
-\subsection{投稿の削除}
-図\ref{f2}を見ると、投稿の横に``Delete''ボタンがあるのが分かる。
-このボタンを押すと投稿が削除され、図\ref{f1}の状態に戻る。
+\section{ビルド方法}
+GLUTとglpngが導入されているCygwin上で、次のコマンドを入力することでビルド、実行することができる。
 
-``Delete''ボタンを押すと/delにリダイレクトされるように設定されており、このときbbs.rbの123行目以降が実行される。
-当該のデータをデータベースから消去し、ページを再読み込みすることで投稿が削除される。
+\begin{lstlisting}[style=text]
+$ make
+$ ./j16426.exe
+\end{lstlisting}
 
-\subsection{サニタイズと改行}
-\verb|<|や\verb|'|などの特殊な文字も入力できるように入力内容に対してサニタイズを行った。
-サニタイズをすることで、HTMLタグを不正に実行される脆弱性を予防する効果もある。
-また今回は、改行コードをHTMLタグ{\tt\verb|<br>|}に変換することで改行の入力を可能にした。
 
-特殊な文字と改行を混じえた投稿の様子を図\ref{f3}に示す。
-図\ref{f3}を見ると、各記号が正しく投稿されており、改行もされていることが分かる。
+\section{実行結果}
+本プログラムを実行した結果を図\ref{fig:res1}に示す。
+図\ref{fig:res1}を見ると、現在時刻が表示されており、文字盤の中には歯車と振り子が描画されていることが分かる。
+また、振り子の動きに連動して各歯車と針が動いている。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{bbs10.png}
-  \caption{サニタイズと改行}
-  \label{f3}
+  \includegraphics[width=7cm]{result1.png}
+  \caption{実行結果}
+  \label{fig:res1}
 \end{figure}
 
-\subsection{入力文字数制限}
-main.erbの85, 88行目を見ると、input要素とtextarea要素にrequired, maxlength属性が付与されていることが分かる。
-これにより、文字を入力していなくても文字数が多すぎても投稿出来ないようになっている。
-図\ref{f4}は、文字を入力せずにPostボタンを押した時の挙動である。
+\subsection{アニメーション}
+アニメーションは、\texttt{glutTimerFunc}関数を用いて、短い間隔で描画関数を呼び出すことによって実現している。
+タイマーのコールバック関数である\texttt{Timer}の中でさらにタイマーを登録することで、連続的なアニメーションを表現することが出来る。
+
+また、\texttt{Timer}関数では現在時刻の取得も行う。
+描画関数である\texttt{Display}の中で時刻の取得を行わないのは、機能ごとに関数を分けることで保守性や移植性などを高めるためである。
+
+\subsection{座標系}
+ウィンドウを横長になるように広げた状態を図\ref{fig:res2}, 縦長になるように縮めた状態を図\ref{fig:res3}に示す。
+図\ref{fig:res2}を見ると、ウィンドウサイズに合わせて時計が拡大され、ウィンドウの中心に表示されている。
+図\ref{fig:res3}を見ると、ウィンドウサイズを小さくしても見切れることなく、ウィンドウの横幅いっぱいに表示されていることが分かる。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{bbs06.png}
-  \caption{入力必須フォーム}
-  \label{f4}
-\end{figure}
-
-\subsection{ページ切り替え}
-10件以上の投稿がある場合には、2ページ以降が追加される機能を実装した。
-図\ref{f5}のように、すでに10件の投稿がある状態で投稿をすると2ページ目に投稿が追加される。
-投稿された後の状態を図\ref{f6}に示す。
-図\ref{f6}を見ると、新たに2ページ目が追加され、リダイレクトされていることが分かる。
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=6cm]{bbs07.png}
-  \caption{10件の投稿がある状態}
-  \label{f5}
+  \includegraphics[width=15cm]{result2.png}
+  \caption{横に長いウィンドウ}
+  \label{fig:res2}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{bbs08.png}
-  \caption{11件目の投稿}
-  \label{f6}
+  \includegraphics[width=4.25cm]{result3.png}
+  \caption{縦に長いウィンドウ}
+  \label{fig:res3}
 \end{figure}
 
-ページ番号はURLに指定できる。
-指定されたページ番号ををbbs.rbの50行目で受け取り、そのページに相当する投稿を表示する。
-なお、範囲外のURLが入力された場合は、エラーページを表示する。
-エラーページが表示された様子を図\ref{f7}に示す。
+これは、ウィンドウサイズが変更された際に逐次座標系を変更しているためである。
+ウィンドウが横に長い際の座標系は図\ref{fig:frame1}, 縦に長い際は図\ref{fig:frame2}のようになる。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{bbs11.png}
-  \caption{エラーページ}
-  \label{f7}
+  \includegraphics[width=10cm]{座標系1.pdf}
+  \caption{横に長い座標系}
+  \label{fig:frame1}
 \end{figure}
-
-\section{CSSの設定}
-ページを見やすくするために、CSSを設定した。
-全てのページで共通するスタイルをリスト\ref{style}のstyle.css, %
-掲示板のページでのみ適用させたいスタイルを\ref{maincss}のmain.cssで設定することで、
-メンテナンス性を向上させた。
-
-CSSを設定していないページを図\ref{f8}に示す。
-CSSを設定して色合いや間隔などを調整することで見やすくなることが分かる。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{bbs12.png}
-  \caption{CSSを設定していないページ}
-  \label{f8}
+  \includegraphics[width=6cm]{座標系2.pdf}
+  \caption{縦に長い座標系}
+  \label{fig:frame2}
 \end{figure}
+
+この設定を行っているのが\texttt{Reshape}関数である。ウィンドウサイズが変更された際に呼び出されるコールバック関数として\texttt{glutReshapeFunc}関数で登録されている。
+\texttt{gluOrtho2D}という関数で画面端に対する座標を指定することができる。
+これを図\ref{fig:frame1}, \ref{fig:frame2}のように設定することで、画面サイズに対する比で座標をしていすることになるので、
+ウィンドウサイズが変更されてもそれに合わせて拡大縮小されるようになる。
+また、$x$軸方向と$y$軸方向の座標の比を1:1になるようにしているため、横長、縦長にしても時計が潰れることなく、正円が保たれる。
+
+\subsection{図形描画}
+
 
 \begin{thebibliography}{9}
   \bibitem{bib:1} 伊藤祥一, ``Springs of C 楽しく身につくプログラミング'', 森北出版株式会社, 2017, pp. 109--110.
-  \bibitem{bib:2} ``Pendulum clock'', Wikipedia, \texttt{https://en.wikipedia.org/wiki/Pendulum_clock}, 参照2019/12/5.
+  \bibitem{bib:2} ``Pendulum clock'', Wikipedia, \texttt{\url{https://en.wikipedia.org/wiki/Pendulum_clock}}, 参照2019/12/5.
 \end{thebibliography}
+
 
 \end{document}
