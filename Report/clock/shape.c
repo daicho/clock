@@ -100,8 +100,8 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
     for (i = 0; i < n * 2; i += 2) {
         glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a));
         glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a));
-        glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
-        glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
+        glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos(i * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin(i * w + a));
+        glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos(i * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin(i * w + a));
     }
     glEnd();
 
@@ -113,8 +113,8 @@ void drawGear(double x, double y, double a, double r, double l, int n) {
             glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a));
             glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a));
         } else {
-            glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
-            glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
+            glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos(i * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin(i * w + a));
+            glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos(i * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin(i * w + a));
         }
     }
     glEnd();
@@ -150,8 +150,8 @@ void drawKana(double x, double y, double a, double r, double l, int n) {
     for (i = 0; i < n * 2; i += 2) {
         glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a));
         glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a));
-        glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
-        glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
+        glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin(i * w + a));
+        glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin(i * w + a));
     }
     glEnd();
 
@@ -163,8 +163,8 @@ void drawKana(double x, double y, double a, double r, double l, int n) {
             glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a));
             glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a));
         } else {
-            glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin((i) * w + a));
-            glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos((i) * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin((i) * w + a));
+            glVertex2d(x + (r - l * 0.5) * cos((i - 0.5) * w + a) + l * cos(i * w + a), y + (r - l * 0.5) * sin((i - 0.5) * w + a) + l * sin(i * w + a));
+            glVertex2d(x + (r - l * 0.5) * cos((i + 0.5) * w + a) + l * cos(i * w + a), y + (r - l * 0.5) * sin((i + 0.5) * w + a) + l * sin(i * w + a));
         }
     }
     glEnd();

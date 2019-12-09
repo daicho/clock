@@ -259,6 +259,61 @@ $ ./j16426.exe
 また、$x$軸方向と$y$軸方向の座標の比を1:1になるようにしているため、横長、縦長にしても時計が潰れることなく、正円が保たれる。
 
 \subsection{図形描画}
+shape.cには、歯車や振り子を描画する関数が用意されている。
+その中で、図\ref{fig:gear}のような歯車を描画する方法を説明する。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=8cm]{歯車描画.pdf}
+  \caption{歯車の描画}
+  \label{fig:gear}
+\end{figure}
+
+ここで、歯の中心までの角度を$\theta$, 歯車の半径を$r$, 歯の長さを$l$, 歯数を$n$とすると、
+$p_1$～$p_4$の座標は、それぞれ式\ref{eq:p1}～\ref{eq:p4}のようになる。
+
+\begin{equation}
+  p_1 = \left( r * \cos \left( \theta - \frac{2 \pi}{n} \right), \, r * \sin \left( \theta - \frac{2 \pi}{n} \right) \right)
+  \label{eq:p1}
+\end{equation}
+
+\begin{equation}
+  p_2 = \left( r * \cos \left( \theta + \frac{2 \pi}{n} \right), \, r * \sin \left( \theta + \frac{2 \pi}{n} \right) \right)
+  \label{eq:p2}
+\end{equation}
+
+\begin{equation}
+  p_3 = \left( r * \cos \left( \theta - \frac{2 \pi}{n} \right) + l \cos(\theta), \, r * \sin \left( \theta - \frac{2 \pi}{n} \right) + l \sin(\theta) \right)
+  \label{eq:p3}
+\end{equation}
+
+\begin{equation}
+  p_4 = \left( r * \cos \left( \theta + \frac{2 \pi}{n} \right) + l \cos(\theta), \, r * \sin \left( \theta + \frac{2 \pi}{n} \right) + l \sin(\theta) \right)
+  \label{eq:p4}
+\end{equation}
+
+このような計算を\texttt{drawGear}, \texttt{drawKana}, \texttt{drawGangi}, \texttt{drawPendulum}内で行うことにより、歯車を描画している。
+
+\subsection{歯車の回転}
+見かけ上はそれぞれの歯車が噛み合っているように見えるが、内部的にはそれぞれが独立して回転している。
+それぞれの歯車の半径、ギア比、角速度などは、\texttt{Display}関数内で設定している。
+これらの数値を調整することで、それぞれのパーツが連動して動作しているように見える。
+
+\subsection{画像表示}
+画像表示は、shape.c内の\texttt{putSprite}関数で行っている。
+glpngの\texttt{pngBind}関数で読み込んだ画像を引数に渡すことにより、指定した座標に任意のサイズで画像を表示することができる。
+今回は、文字盤を画像として表示した。
+
+\subsection{makeについて}
+makeとは、ビルド作業を自動化するプログラムである。
+Makefile内にファイルの依存関係などビルドのルールを記述しておくことで、\texttt{make}コマンドを実行するだけでビルドすることができる。
+今回は、ソースファイルの変更に加え、アイコンの画像ファイルとリソースファイルが書き換えられた際も再ビルドが行われるように依存関係を記述した。
+
+
+\section{感想}
+OpenGLのライブラリであるGLUTを用いて、アナログ時計を描画するプログラムを作成した。
+図形を描画する処理を汎用的な関数にまとめることで、完結にコードを記述できた。
+また、図形だけでなく、glpngを用いてpng画像を読み込み表示することにより、リッチなインターフェイスを実現できた。
 
 
 \begin{thebibliography}{9}
